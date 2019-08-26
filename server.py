@@ -42,14 +42,30 @@ def sendLocation(bot,update):
 def dataStore():
     pass
 
+def test_bot(bot,update):
+    chat_id = update.message.chat_id
+
+    print(chat_id)
+
 
 def main():
+
+    """
     updater = Updater('893555483:AAHe1TXjMhEf6oFytXLYz4XEm9f47OlhSgI')
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('bop',bop))
     dp.add_handler(CommandHandler('loca',sendLocation))
     updater.start_polling()
-    updater.idle()
+    updater.idle() """
+
+
+    updater2 = Updater('971130326:AAFwIJEdclodQcpWNZtfEOjFXS_6qg5qusc')
+    dp2 = updater2.dispatcher
+    dp2.add_handler(CommandHandler('test',test_bot))
+    updater2.start_polling()
+    updater2.idle()
+
+
 
 if __name__ == '__main__':
     main()
