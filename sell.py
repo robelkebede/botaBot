@@ -6,9 +6,9 @@ import requests
 import re
 import queue
 import pymongo
-
-
 import logging
+
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -40,7 +40,7 @@ def insert_to_database(bot,update):
     mycol = mydb["seller_info"]
 
     if lat and lng is None:
-        print("SOMTHING IS WRONG XXXXXXXXXXXXXXXXXX")
+        print("the bot cant get the location")
 
     else:
         db_chat_id = mycol.find_one({"chat_id":chat_id})["chat_id"]
