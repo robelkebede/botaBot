@@ -15,6 +15,9 @@ logging.basicConfig(level=logging.DEBUG,
 
 db_client = pymongo.MongoClient("mongodb://localhost:27017/")  
 
+mydb = db_client["Bota"]
+mycol = mydb["seller_info"]
+
 
 
 class Sell:
@@ -35,16 +38,23 @@ class Sell:
 
         return lat,lng
 
+    def chat_id_exists(self,chat_id):
+        db_chat_id = mycol.find_one({"chat_id":chat_id})["chat_id"]
+
+        print("chaeck if chat id exists ",chat_id)
+
+        if chat_id is not None:
+            return True
+        else:
+            return False
 
 
     def insert_to_database(self,bot,update):
 
-        lat,lng = get_location(bot,update)
+        lat,lng = self.get_location(bot,update)
 
         chat_id = update.message.chat_id
 
-        mydb = db_client["Bota"]
-        mycol = mydb["seller_info"]
 
         if lat and lng is None:
             print("the bot cant get the location")
@@ -81,7 +91,21 @@ class Sell:
                 )
 
         #phone = None
+        if self.chat_id_exists(chat_id):
+            #upload a picture 
+            #and descriptioA
+            pass
+        else:
+            #wel come first time seller
+
+            #location
+            #phone
+            # if this both thing exists insert into database
+            #start /sell command
+            pass
+
         insert_to_database(bot,update)
+
 
 
     def test(self,bot,update):
