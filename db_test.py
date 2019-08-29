@@ -18,7 +18,7 @@ for document in cursor:
 del product_data[0]
 
 for data in product_data:
-    print(data[0])
+    print(data[2])
 
 
 
