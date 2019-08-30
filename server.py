@@ -31,6 +31,7 @@ def start(bot,update):
             reply_markup=reply_markup
             )
 
+
     command= update.effective_message.text 
 
     print("TATATATATATATAT ",command)
@@ -43,9 +44,11 @@ def start(bot,update):
         buy.start(bot,update)
 
     elif command == "sell":
-        pass
-        #go to sell file
+
+        sell.start(bot,update)
+
     else:
+        #help
         pass
 
 
@@ -66,6 +69,8 @@ def main():
         buy.start))
     dp.add_handler(CommandHandler('start',start))
     dp.add_handler(MessageHandler(Filters.text, start))
+    dp.add_handler(MessageHandler(Filters.photo, sell.upload_product)) 
+    dp.add_handler(MessageHandler(Filters.text, sell.upload_product)) 
     updater.start_polling()
     updater.idle()
 

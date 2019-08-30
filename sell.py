@@ -1,5 +1,4 @@
 
-
 from telegram.ext import Updater,CommandHandler,Dispatcher,Filters,MessageHandler
 import telegram
 import requests
@@ -16,7 +15,11 @@ logging.basicConfig(level=logging.DEBUG,
 db_client = pymongo.MongoClient("mongodb://localhost:27017/")  
 
 mydb = db_client["Bota"]
-mycol = mydb["seller_info"]
+seller_info = mydb["seller_info"]
+product_info = mydb["product_info"]
+
+file_path = None
+description = None
 
 
 
@@ -39,17 +42,17 @@ class Sell:
         return lat,lng
 
     def chat_id_exists(self,chat_id):
-        db_chat_id = mycol.find_one({"chat_id":chat_id})["chat_id"]
+        db_chat_id = seller_info.find_one({"chat_id":chat_id})["chat_id"]
 
-        print("chaeck if chat id exists ",chat_id)
+        print("chaeck if chat id exists ",db_chat_id)
 
-        if chat_id is not None:
+        if db_chat_id is not None:
             return True
         else:
             return False
 
 
-    def insert_to_database(self,bot,update):
+    def insert_user_to_database(self,bot,update):
 
         lat,lng = self.get_location(bot,update)
 
@@ -60,7 +63,7 @@ class Sell:
             print("the bot cant get the location")
 
         else:
-            db_chat_id = mycol.find_one({"chat_id":chat_id})["chat_id"]
+            db_chat_id = seller_info.find_one({"chat_id":chat_id})["chat_id"]
             print("dbdbdb ",db_chat_id)
             if db_chat_id:
                 #update
@@ -77,7 +80,7 @@ class Sell:
 
 
 
-    def test_bot(self,bot,update):
+    def start(self,bot,update):
         chat_id = update.message.chat_id
 
         location_keyboard = telegram.KeyboardButton(text="send_location", request_location=True)
@@ -93,39 +96,60 @@ class Sell:
         #phone = None
         if self.chat_id_exists(chat_id):
             #upload a picture 
-            #and descriptioA
-            pass
+
+            self.upload_product(bot,update)
+
+            #and description
+            
+            #if this both thing exists insert into database
+            #(chat_id,pic_url,description,timestamp)
+             
+
         else:
-            #wel come first time seller
+            #welcome first time seller
 
             #location
             #phone
-            # if this both thing exists insert into database
+            #if this both thing exists insert into database
+            #(chat_id,location,phone)
+
             #start /sell command
             pass
 
-        insert_to_database(bot,update)
+        insert_user_to_database(bot,update)
 
 
 
     def test(self,bot,update):
-        update.message.reply_text("this is in object oreanted programming shit is at est")
+        update.message.reply_text(" is at est")
+    
 
-
-    def upload_picture(self,bot,update):
-
+    def upload_product(self,bot,update):
+        
+        update.message.reply_text("upload a picture of the product")
+    
         chat_id = update.message.chat_id
         time = datetime.datetime.now()
+        pic = update.message.photo[0].file_id
         file_path = bot.getFile(pic)["file_path"]
 
-        mydb = db_client["Bota"]
-        mycol = mydb["product_info"]
+        if file_path is not None:
+            print("XAXAXAXAXAXAX ",file_path)
+            update.message.reply_text("picture recieved")
 
+            update.message.reply_text("write a description")
+            description = update.message.text 
 
-        mycol.insert({"chat_id":chat_id,"pic_url":file_path,"timestamp":time})
-
-        update.message.reply_text("picture recieved")
-
+            if description is not None:
+                update.message.reply_text("description updated")
+                print("XSXSXSXSXSXSXS ",description)
+         
+        if description and file_path is not None:
+            print("XSXSXSXSXSXSX both exists",[description,file_path])
+            #product_info.insert({"chat_id":chat_id,"pic_url":file_path,"timestamp":time})
+        else:
+            print("CSCSSXSXSXSX ",[description,file_path])
+        #sucessfully uploaded the product
 
 
 def main():
@@ -137,7 +161,7 @@ def main():
     dp2.add_handler(MessageHandler(Filters.contact, sell.test_bot))  
     dp2.add_handler(MessageHandler(Filters.location, sell.test_bot))
     dp2.add_handler(MessageHandler(Filters.photo, sell.upload_picture)) 
-    dp2.add_handler(CommandHandler('start',sell.test_bot))
+    dp2.add_handler(CommandHandler('start',sell.start))
     dp2.add_handler(CommandHandler('test',sell.test))
     updater2.start_polling()
     updater2.idle()
