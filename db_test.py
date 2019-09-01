@@ -4,21 +4,43 @@ import pymongo
 client = pymongo.MongoClient("localhost", 27017, maxPoolSize=50)
 
 db = client.Bota
-collection = db['product_info']
-collection1 = db['seller_info']
+product_info = db['product_info']
+seller_info = db['seller_info']
 
-cursor = collection.find({})
-cursor1 = collection1.find({})
+def show_all():
 
-product_data = [[]]
+    cursor = product_info.find({})
+    cursor1 = seller_info.find({})
 
-for document in cursor:
-    product_data.append([document["chat_id"],document["timestamp"],document["pic_url"]])
+    product_data = [[]]
+
+    for document in cursor1:
+        print(document)
+
+        
+    #del product_data[0]
+
+
+def delete_all():
+    #product_info.remove({})
+    seller_info.remove({})
+
+def find_one():
+
+    try:
+
+        db_chat_id = seller_info.find_one({"chat_id":23})["chat_id"]
+
+        print(db_chat_id)
+    except Exception as e:
+        pass
+        
     
-del product_data[0]
 
-for data in product_data:
-    print(data[2])
+def main():
+    show_all()
+    find_one()
 
 
-
+if __name__ == "__main__":
+    main()

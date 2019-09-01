@@ -62,7 +62,7 @@ class Buy:
 
 
     def test(self,bot,update):
-        update.message.reply_text("this is in object oreanted programming shit is at est")
+        update.message.reply_text("this is in object oreanted programming ")
 
 
     def get_product(self):
@@ -89,9 +89,6 @@ class Buy:
                 text="send_location", 
                 request_location=True)
 
-        """ contact_keyboard = telegram.KeyboardButton(
-                text="send_contact", 
-                request_contact=True) """
 
         custom_keyboard =[[ location_keyboard ]]
 
@@ -106,23 +103,16 @@ class Buy:
         lat,lng = self.get_location(bot,update)
         print("ASDASDASDASDASDAS  ",lat,lng) 
 
-        #without Filter
+        #test without Filter
 
         product_data = self.get_product()
 
         print("THEHTHEHTHEHTHETHT  ",product_data[1][2])
 
-        
-        #bot.send_photo(chat_id=chat_id,photo="https://api.telegram.org/file/bot971130326:AAFwIJEdclodQcpWNZtfEOjFXS_6qg5qusc/photos/file_4.jpg")
 
         update.message.reply_text("this are products aroud you")
 
-    def me(self):
-        pass
 
-
-
-        
 
 def main():
 
