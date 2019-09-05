@@ -11,6 +11,12 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+#0 server,1 buy,2 sell
+
+global FLAG 
+
+FLAG = 10
+
 
 def test(bot,update):
     update.message.reply_text("the server is online")
@@ -18,6 +24,8 @@ def test(bot,update):
 def start_all(bot,update):
     chat_id = update.message.chat_id
 
+    FLAG = 0
+    
     sell = telegram.KeyboardButton(text="buy")
 
     buy = telegram.KeyboardButton(text="sell")
@@ -37,15 +45,15 @@ def start_all(bot,update):
 
     print("TATATATATATATAT ",command)
 
-    buy = Buy()
-    sell = Sell()
 
     if command == "buy":
-        
+        buy = Buy()
+        FLAG = 1
         buy.start(bot,update)
 
     elif command == "sell":
-
+        sell = Sell()
+        FLAG = 2
         sell.start(bot,update)
 
     else:
@@ -58,24 +66,37 @@ def main():
 
     updater = Updater('893555483:AAHe1TXjMhEf6oFytXLYz4XEm9f47OlhSgI')
 
-    buy = Buy()
-    sell = Sell()
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('test',test))
-    dp.add_handler(MessageHandler(Filters.location, 
-        buy.start))
-    dp.add_handler(CommandHandler('start',start_all))
-    dp.add_handler(CallbackQueryHandler(start_all))
-    dp.add_handler(MessageHandler(Filters.text, start_all))
 
-    dp.add_handler(MessageHandler(Filters.location, sell.insert_user_to_database)) 
-    dp.add_handler(MessageHandler(Filters.photo, sell.upload_product2)) 
-    dp.add_handler(MessageHandler(Filters.text, sell.upload_product2)) 
+    #if FLAG is 0,1 or 2
+    print("THE REAL FLAG ",FLAG)
+
+    if FLAG == 1:
+        buy = Buy()
+        dp.add_handler(MessageHandler(Filters.location, 
+        buy.start))
+   
+
+    elif FLAG == 2:
+        sell = Sell()
+        dp.add_handler(MessageHandler(Filters.location, sell.insert_user_to_database)) 
+        dp.add_handler(MessageHandler(Filters.photo, sell.upload_product2)) 
+        dp.add_handler(MessageHandler(Filters.text, sell.upload_product2)) 
+
+
+    elif FLAG == 0:
+        dp.add_handler(CommandHandler('start',start_all))
+        print("THIS HIOS")
+
+    else:
+        print("NONONONONONONONONON",FLAG)
+
+
     updater.start_polling()
     updater.idle()
 
 
 if __name__ == '__main__':
     main()
-

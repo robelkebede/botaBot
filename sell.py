@@ -4,7 +4,6 @@ import telegram
 import requests
 import re
 import datetime
-import queue
 import pymongo
 import logging
 
@@ -26,7 +25,6 @@ description = None
 class Sell:
     def __init__(self):
         pass
-
 
     def get_location(self,bot,update):
         lat = None
@@ -76,17 +74,23 @@ class Sell:
                 )
 
 
-        if lat and lng is None:
-            print("the bot cant get the location")
 
+        if lat and lng is None:
+            print("the bot cant get the location ")
+
+            update.message.reply_text("cant get the location ")
+            
         else:
             db_chat_id = seller_info.find_one({"chat_id":chat_id})["chat_id"]
             print("dbdbdb ",db_chat_id)
+            
             if db_chat_id:
                 #update
                 print("UPDATE")
                 old_data = {"chat_id":chat_id}
                 new_data = {"$set":{"chat_id":chat_id,"lat":lat,"lng":lng}}
+
+                print("XSXSXSXSXSX ",[lat,lng,chat_id])
                 
                 mycol.update_one(old_data,new_data)
 
@@ -103,6 +107,7 @@ class Sell:
     def start(self,bot,update):
         
         chat_id = update.message.chat_id
+        import server
 
         #phone = None
 
@@ -110,6 +115,8 @@ class Sell:
             #upload a picture 
 
             self.upload_product2(bot,update)
+
+            server.FLAG  = 1
 
             #and description
             
@@ -120,6 +127,9 @@ class Sell:
         else:
             #welcome first time seller
             self.insert_user_to_database(bot,update)
+
+            server.FLAG  = 2
+
 
             #location
             #phone
@@ -201,5 +211,3 @@ def main():
 
 
 
-if __name__ == '__main__':
-    main()
