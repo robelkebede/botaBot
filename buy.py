@@ -88,7 +88,7 @@ class Buy:
                 text="send_location", 
                 request_location=True)
 
-
+         
         custom_keyboard =[[ location_keyboard ]]
 
         reply_markup = telegram.ReplyKeyboardMarkup(
@@ -98,9 +98,10 @@ class Buy:
                 text="Information",
                 reply_markup=reply_markup
                 )
-
+        import server
         lat,lng = self.get_location(bot,update)
         print("ASDASDASDASDASDAS  ",lat,lng) 
+        print("DASDASDASDASDAS  ",server.FLAG) 
 
         #test without Filter
 

@@ -13,10 +13,7 @@ logging.basicConfig(level=logging.DEBUG,
 
 #0 server,1 buy,2 sell
 
-global FLAG 
-
-FLAG = 10
-
+FLAG = 0
 
 def test(bot,update):
     update.message.reply_text("the server is online")
@@ -49,11 +46,13 @@ def start_all(bot,update):
     if command == "buy":
         buy = Buy()
         FLAG = 1
+
         buy.start(bot,update)
 
     elif command == "sell":
         sell = Sell()
         FLAG = 2
+
         sell.start(bot,update)
 
     else:
@@ -64,14 +63,15 @@ def start_all(bot,update):
 
 def main():
 
-    updater = Updater('893555483:AAHe1TXjMhEf6oFytXLYz4XEm9f47OlhSgI')
-
+    updater = Updater('893555483:AAFdgfK9_SDHeQ8AwxTzZ1FnmLpHVAa3qyM')
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('test',test))
+    dp.add_handler(CommandHandler('start',start_all))
 
     #if FLAG is 0,1 or 2
-    print("THE REAL FLAG ",FLAG)
+
+    print("THE REAL FLAG ",dp.bot.get_updates())
 
     if FLAG == 1:
         buy = Buy()
@@ -87,8 +87,9 @@ def main():
 
 
     elif FLAG == 0:
-        dp.add_handler(CommandHandler('start',start_all))
-        print("THIS HIOS")
+       
+        dp.add_handler(MessageHandler(Filters.text, start_all)) 
+        print("THIS HIOS",FLAG)
 
     else:
         print("NONONONONONONONONON",FLAG)
