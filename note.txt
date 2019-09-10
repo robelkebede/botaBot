@@ -1,0 +1,6 @@
+
+questions
+
+#head
+why is my global variable updating when i assign values in ZZ
+

@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.DEBUG,
 
 db_client = pymongo.MongoClient("mongodb://localhost:27017/")  
 
+CHOOSE, LOCATION_BUY, LOCATION_SELL = range(3)
 
 class Buy:
 
@@ -82,17 +83,19 @@ class Buy:
         
 
     def start(self,bot,update):
+
+        import server
         chat_id = update.message.chat_id
         
         location_keyboard = telegram.KeyboardButton(
-                text="send_location", 
+                text="send_location2", 
                 request_location=True)
 
          
         custom_keyboard =[[ location_keyboard ]]
 
         reply_markup = telegram.ReplyKeyboardMarkup(
-                custom_keyboard)
+                custom_keyboard,one_time_keyboard=True)
 
         bot.send_message(chat_id=chat_id,
                 text="Information",
@@ -101,16 +104,19 @@ class Buy:
         import server
         lat,lng = self.get_location(bot,update)
         print("ASDASDASDASDASDAS  ",lat,lng) 
-        print("DASDASDASDASDAS  ",server.FLAG) 
 
         #test without Filter
 
-        product_data = self.get_product()
+        if lat and lng is not None:
 
-        print("THEHTHEHTHEHTHETHT  ",product_data[1][2])
+            product_data = self.get_product()
+            print("THEHTHEHTHEHTHETHT  ",product_data[1][2])
 
 
-        update.message.reply_text("this are products aroud you")
+
+            update.message.reply_text("this are products aroud you")
+
+
 
 
 

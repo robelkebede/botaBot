@@ -1,5 +1,5 @@
 
-from telegram.ext import Updater,CommandHandler,Dispatcher,Filters,MessageHandler
+from telegram.ext import Updater,CommandHandler,Dispatcher,Filters,MessageHandler,ConversationHandler
 import telegram
 import requests
 import re
@@ -24,7 +24,9 @@ description = None
 
 class Sell:
     def __init__(self):
-        pass
+
+        self.CHOOSE,self.BUY, self.SELL = range(3)
+        
 
     def get_location(self,bot,update):
         lat = None
@@ -47,6 +49,7 @@ class Sell:
 
             return True
         except Exception as e:
+            print("CHAT ID DONOT EXIST")
             return False
 
         
@@ -55,23 +58,29 @@ class Sell:
         lat,lng = self.get_location(bot,update)
         chat_id = update.message.chat_id
 
+
         update.message.reply_text("welcome first time seller")
+
+        #SEND THE PHONE NUMBER
 
         update.message.reply_text("send you location ")
 
         location_keyboard = telegram.KeyboardButton(
-                text="send_location", 
+                text="send_location1", 
                 request_location=True)
 
         custom_keyboard =[[ location_keyboard ]]
 
         reply_markup = telegram.ReplyKeyboardMarkup(
-                custom_keyboard)
+                custom_keyboard,
+                one_time_keyboard=True)
 
         bot.send_message(chat_id=chat_id,
                 text="Information",
                 reply_markup=reply_markup
                 )
+
+        print("CDCDCDCDCDC ",[lat,lng])
 
 
 
@@ -81,66 +90,35 @@ class Sell:
             update.message.reply_text("cant get the location ")
             
         else:
-            db_chat_id = seller_info.find_one({"chat_id":chat_id})["chat_id"]
-            print("dbdbdb ",db_chat_id)
-            
-            if db_chat_id:
-                #update
-                print("UPDATE")
-                old_data = {"chat_id":chat_id}
-                new_data = {"$set":{"chat_id":chat_id,"lat":lat,"lng":lng}}
+            #insert
+            #mycol.insert({"chat_id":chat_id,"lat":lat,"lng":lng}) 
+            print("this is a test for the register function")
+            print("XSXSXSXSXSX ",[lat,lng,chat_id])
 
-                print("XSXSXSXSXSX ",[lat,lng,chat_id])
-                
-                mycol.update_one(old_data,new_data)
-
-            else:
-                #insert
-                #mycol.insert({"chat_id":chat_id,"lat":lat,"lng":lng}) 
-                print("XSXSXSXSXSX ",[lat,lng,chat_id])
-
+            if lat and lng and chat_id is not None:
                 update.message.reply_text("you are now registerd go to /start")
-                print("INSERT")
+                return ConversationHandler.END
+
+
 
 
 
     def start(self,bot,update):
         
         chat_id = update.message.chat_id
-        import server
 
-        #phone = None
+        #print("THEHTHEHTHE SATAE ",self.LOCATION_SELL)
 
         if self.chat_id_exists(chat_id):
-            #upload a picture 
 
             self.upload_product2(bot,update)
 
-            server.FLAG  = 1
-
-            #and description
-            
-            #if this both thing exists insert into database
-            #(chat_id,pic_url,description,timestamp)
-             
-
         else:
-            #welcome first time seller
+            
             self.insert_user_to_database(bot,update)
 
-            server.FLAG  = 2
 
-
-            #location
-            #phone
-            #if this both thing exists insert into database
-            #(chat_id,location,phone)
-            #i have a two text filters and in two diffrint classes callback method x.get_text y.get_text 
-
-            #start /sell command
-            pass
-
-        #insert_user_to_database(bot,update)
+            
 
 
 
@@ -160,7 +138,7 @@ class Sell:
             print("XAXAXAXAXAXAX ",file_path)
             update.message.reply_text("picture recieved")
             
-            product_info.insert({"chat_id":chat_id,"pic_url":file_path,"timestamp":time})
+            #product_info.insert({"chat_id":chat_id,"pic_url":file_path,"timestamp":time})
             #uploaded with out description
 
 
