@@ -4,3 +4,59 @@ questions
 #head
 why is my global variable updating when i assign values in ZZ
 
+*make the bot conversationalist make the choice the matri stuff
+*i like the first conversation
+
+*SELL
+    #First time seller
+    ==================
+
+    welcome Robel i am thrilled to have you with me you need to tell me
+    somethings about you and you are good to go 
+
+    can you please send me your location if you change location remember you can always 
+    update it 
+    
+    #insert location\
+
+    super thanks for the location now we need your phone number 
+
+    #insert phone
+
+    awsome you are now good to go use /start to  
+
+    #register Seller
+    ================
+
+    Hi robel welcome back if you want to sell stuff just send us the picture of
+    the product
+
+    #send picture
+
+    nice now send a description for the product \n ex huawie mate ,20,000 ETB
+
+    #description
+
+    cool now people around you can see the product Thank you
+
+*BUY
+
+hi Robl Now can you please send your location 
+
+#location
+
+picture
+loc(button)|phone(button)
+
+SPACE
+
+| |
+| |
+
+This are the markets around you 
+
+
+
+
+
+

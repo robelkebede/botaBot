@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG,
 
 db_client = pymongo.MongoClient("mongodb://localhost:27017/")  
 
-CHOOSE, LOCATION_BUY, LOCATION_SELL = range(3)
+
 
 class Buy:
 
@@ -61,9 +61,6 @@ class Buy:
         pass
 
 
-    def test(self,bot,update):
-        update.message.reply_text("this is in object oreanted programming ")
-
 
     def get_product(self):
         db = db_client.Bota
@@ -84,11 +81,11 @@ class Buy:
 
     def start(self,bot,update):
 
-        import server
+        
         chat_id = update.message.chat_id
         
         location_keyboard = telegram.KeyboardButton(
-                text="send_location2", 
+                text="send_location", 
                 request_location=True)
 
          
@@ -101,11 +98,13 @@ class Buy:
                 text="Information",
                 reply_markup=reply_markup
                 )
-        import server
+            
         lat,lng = self.get_location(bot,update)
         print("ASDASDASDASDASDAS  ",lat,lng) 
 
         #test without Filter
+        
+
 
         if lat and lng is not None:
 
@@ -115,8 +114,6 @@ class Buy:
 
 
             update.message.reply_text("this are products aroud you")
-
-
 
 
 

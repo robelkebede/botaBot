@@ -14,7 +14,7 @@ def show_all():
 
     product_data = [[]]
 
-    for document in cursor1:
+    for document in cursor:
         print(document)
 
         
@@ -22,8 +22,8 @@ def show_all():
 
 
 def delete_all():
-    #product_info.remove({})
-    seller_info.remove({})
+    product_info.remove({})
+    #seller_info.remove({})
 
 def find_one():
 
@@ -39,7 +39,7 @@ def find_one():
 
 def main():
     show_all()
-    find_one()
+    #find_one()
 
 
 if __name__ == "__main__":

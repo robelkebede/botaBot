@@ -127,7 +127,9 @@ def main():
                       MessageHandler(Filters.text,buy.start)
                     ],
                 SELL: [MessageHandler(Filters.location,sell.get_location),
-                       MessageHandler(Filters.text,sell.start)]
+                       MessageHandler(Filters.text,sell.start)
+                       MessageHandler(Filters.photo,sell.start)
+                       ]
                     
 
                 },

@@ -17,15 +17,11 @@ mydb = db_client["Bota"]
 seller_info = mydb["seller_info"]
 product_info = mydb["product_info"]
 
-file_path = None
-description = None
-
-
+global f_path
 
 class Sell:
     def __init__(self):
-
-        self.CHOOSE,self.BUY, self.SELL = range(3)
+        pass
         
 
     def get_location(self,bot,update):
@@ -45,11 +41,11 @@ class Sell:
 
         try:
 
-            db_chat_id = seller_info.find_one({"chat_id":23})["chat_id"]
+            db_chat_id = seller_info.find_one({"chat_id":chat_id})["chat_id"]
 
             return True
         except Exception as e:
-            print("CHAT ID DONOT EXIST")
+            print("CHAT ID DONOT EXIST",e)
             return False
 
         
@@ -61,12 +57,10 @@ class Sell:
 
         update.message.reply_text("welcome first time seller")
 
-        #SEND THE PHONE NUMBER
-
-        update.message.reply_text("send you location ")
+        update.message.reply_text("send your location ")
 
         location_keyboard = telegram.KeyboardButton(
-                text="send_location1", 
+                text="send_location", 
                 request_location=True)
 
         custom_keyboard =[[ location_keyboard ]]
@@ -82,6 +76,8 @@ class Sell:
 
         print("CDCDCDCDCDC ",[lat,lng])
 
+        #optimize >>>
+        #error handling in mycol.insert
 
 
         if lat and lng is None:
@@ -90,13 +86,15 @@ class Sell:
             update.message.reply_text("cant get the location ")
             
         else:
-            #insert
-            #mycol.insert({"chat_id":chat_id,"lat":lat,"lng":lng}) 
+            #insert >>>
             print("this is a test for the register function")
             print("XSXSXSXSXSX ",[lat,lng,chat_id])
 
             if lat and lng and chat_id is not None:
+                #check if the data is loded in to the database
+                seller_info.insert({"chat_id":chat_id,"lat":lat,"lng":lng}) 
                 update.message.reply_text("you are now registerd go to /start")
+                #it is not going back
                 return ConversationHandler.END
 
 
@@ -107,70 +105,97 @@ class Sell:
         
         chat_id = update.message.chat_id
 
-        #print("THEHTHEHTHE SATAE ",self.LOCATION_SELL)
-
         if self.chat_id_exists(chat_id):
 
-            self.upload_product2(bot,update)
+            
+            self.upload_product(bot,update)
 
         else:
             
             self.insert_user_to_database(bot,update)
 
 
-            
 
-
-
-    def test(self,bot,update):
-        update.message.reply_text(" is at est")
-
+    """
     def upload_product2(self,bot,update):
         
         update.message.reply_text("upload a picture of the product2")
+
+        pic = None
+        file_path = None
     
         chat_id = update.message.chat_id
         time = datetime.datetime.now()
-        pic = update.message.photo[0].file_id
-        file_path = bot.getFile(pic)["file_path"]
+        try:
+            pic = update.message.photo[0].file_id
+            file_path = bot.getFile(pic)["file_path"]
+        except:
+            print("inmage not yet sent")
 
         if file_path is not None:
             print("XAXAXAXAXAXAX ",file_path)
             update.message.reply_text("picture recieved")
             
-            #product_info.insert({"chat_id":chat_id,"pic_url":file_path,"timestamp":time})
             #uploaded with out description
 
+            return ConversationHandler.END
 
+    """  
     
-    """
     def upload_product(self,bot,update):
         
         update.message.reply_text("upload a picture of the product")
+        import new_server
     
-        chat_id = update.message.chat_id
-        time = datetime.datetime.now()
-        pic = update.message.photo[0].file_id
-        file_path = bot.getFile(pic)["file_path"]
+        pic = None
+        file_path = None
+        description = None
+    
+        
+        try:
+            pic = update.message.photo[0].file_id
+            file_path = bot.getFile(pic)["file_path"]
+        except:
+            print("image not yet sent")
+
 
         if file_path is not None:
             print("XAXAXAXAXAXAX ",file_path)
             update.message.reply_text("picture recieved")
 
-        update.message.reply_text("write a description")
-        description = update.effective_message.text 
+            global f_path
+
+            f_path = file_path
+
+            update.message.reply_text("write a description")
+
+        
+        return new_server.UPLOAD_PIC
+
+                
+    def upload_product2(self,bot,update):
+
+        global f_path
+
+        #find a way to delete this global variable
+
+        description = update.message.text
+
+        chat_id = update.message.chat_id
+        time = datetime.datetime.now()
 
         if description is not None:
-            update.message.reply_text("description updated")
-            print("XSXSXSXSXSXSXS ",[description,file_path])
-         
-        if description and file_path is not None:
-            print("XSXSXSXSXSXSX both exists",[description,file_path])
-            #product_info.insert({"chat_id":chat_id,"pic_url":file_path,"timestamp":time})
+            print("description ",[f_path,description])
+            #check if the data is sucessfuly loded in to the database
+            product_info.insert({"chat_id":chat_id,"description":description,"pic_url":f_path,"timestamp":time})
+
+            update.message.reply_text("product uploaded")
+
+            return ConversationHandler.END
+            
         else:
-            print("CSCSSXSXSXSX ",[description,file_path])
-        #sucessfully uploaded the product
-        """
+            print([description])
+    
 
 
 def main():
