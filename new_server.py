@@ -66,7 +66,7 @@ def done(update, context):
 
 def main():
 
-    updater = Updater('893555483:AAFdgfK9_SDHeQ8AwxTzZ1FnmLpHVAa3qyM')
+    updater = Updater('893555483:AAGdRO8sruE8lVrCBrd8GnlBrj1W28_Sit0')
 
     dp = updater.dispatcher
     buy = Buy()
@@ -94,7 +94,6 @@ def main():
 
     dp.add_handler(conv_handler)
 
-    #dp.add_handler(MessageHandler(Filters.text, sell.upload_product)) 
     dp.add_error_handler(error)
 
     updater.start_polling()

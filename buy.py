@@ -72,10 +72,9 @@ class Buy:
         for document in cursor:
              product_data.append([document["chat_id"],
                  document["timestamp"],
-                 document["pic_url"]])
+                 document["f_pic"],document["description"]])
 
         del product_data[0]
-
         return product_data
         
 
@@ -107,9 +106,14 @@ class Buy:
 
 
         if lat and lng is not None:
+            
+            products = self.get_product()
+            print("PRODUCTS ",products)
 
-            product_data = self.get_product()
-            print("THEHTHEHTHEHTHETHT  ",product_data[1][2])
+            for product in products:
+                print("THE PRODUCT",product[2])
+                bot.send_photo(chat_id=chat_id,photo=product[2])
+                update.message.reply_text(product[3])
 
 
 
@@ -119,7 +123,7 @@ class Buy:
 
 def main():
 
-    updater = Updater('893555483:AAHe1TXjMhEf6oFytXLYz4XEm9f47OlhSgI')
+    updater = Updater('')
     dp = updater.dispatcher
     buy = Buy()
     dp.add_handler(CommandHandler('start',buy.start))
@@ -130,3 +134,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

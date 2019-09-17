@@ -23,7 +23,7 @@ def show_all():
 
 def delete_all():
     product_info.remove({})
-    #seller_info.remove({})
+    seller_info.remove({})
 
 def find_one():
 
@@ -40,6 +40,7 @@ def find_one():
 def main():
     show_all()
     #find_one()
+    #delete_all()
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ seller_info = mydb["seller_info"]
 product_info = mydb["product_info"]
 
 global f_path
+global f_pic
 
 class Sell:
     def __init__(self):
@@ -164,8 +165,10 @@ class Sell:
             update.message.reply_text("picture recieved")
 
             global f_path
+            global f_pic
 
             f_path = file_path
+            f_pic = pic
 
             update.message.reply_text("write a description")
 
@@ -176,6 +179,8 @@ class Sell:
     def upload_product2(self,bot,update):
 
         global f_path
+        global f_pic
+
 
         #find a way to delete this global variable
 
@@ -187,7 +192,7 @@ class Sell:
         if description is not None:
             print("description ",[f_path,description])
             #check if the data is sucessfuly loded in to the database
-            product_info.insert({"chat_id":chat_id,"description":description,"pic_url":f_path,"timestamp":time})
+            product_info.insert({"chat_id":chat_id,"description":description,"pic_url":f_path,"f_pic":f_pic,"timestamp":time})
 
             update.message.reply_text("product uploaded")
 
