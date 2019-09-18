@@ -59,14 +59,16 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-def done(update, context):
-    user_data = context.user_data
+def done(bot, update):
+    
+    #user_data = context.user_data
+    update.message.reply_text("Thank you go to /start")
 
     return ConversationHandler.END
 
 def main():
 
-    updater = Updater('')
+    updater = Updater('893555483:AAGdRO8sruE8lVrCBrd8GnlBrj1W28_Sit0')
 
     dp = updater.dispatcher
     buy = Buy()
@@ -78,7 +80,9 @@ def main():
              states={
 
                  CHOOSE: [MessageHandler(Filters.regex('^(buy|sell)$'), choice)],
-                 BUY: [MessageHandler(Filters.location,buy.start)],
+                 BUY: [MessageHandler(Filters.location,buy.start),
+                        CallbackQueryHandler(buy.location_button)
+                     ],
 
                  SELL: [MessageHandler(Filters.location,sell.start),
                        MessageHandler(Filters.photo,sell.upload_product), 
@@ -92,8 +96,9 @@ def main():
                  
                  
             },
-                 fallbacks=[MessageHandler(Filters.regex('^Done$'), done)]
+             fallbacks=[CommandHandler('done', done)]
             )
+
 
     dp.add_handler(conv_handler)
 
@@ -101,6 +106,8 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
+
 
 if __name__ == "__main__":
     main()

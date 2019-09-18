@@ -1,8 +1,6 @@
 
 from math import sin, cos, sqrt, atan2, radians
-from telegram.ext import Updater,CommandHandler,Dispatcher,Filters,MessageHandler,CallbackQueryHandler,ConversationHandler
-
-from telegram import InlineKeyboardButton,InlineKeyboardMarkup
+from telegram.ext import Updater,CommandHandler,Dispatcher,Filters,MessageHandler
 import telegram
 import datetime
 import logging
@@ -19,9 +17,7 @@ db_client = pymongo.MongoClient("mongodb://localhost:27017/")
 class Buy:
 
     def __init__(self):
-        self.chat_id = None 
-        self.lat = None
-        self.lng = None
+        pass 
 
     def get_location(self,bot,update):
         lat = None
@@ -39,12 +35,10 @@ class Buy:
 
     def calculate_distance(self,user_lat,user_lng,product_lat,product_lng):
 
-        R = 6373.0
-
-        user_lat = radians(float(user_lat))
-        user_lng = radians(float(user_lng))
-        product_lat = radians(float(product_lat))
-        product_lng = radians(float(product_lng))
+        user_lat = radians(user_lat)
+        user_lng = radians(user_lng)
+        product_lat = radians(product_lat)
+        product_lng = radians(product_lng)
 
         dlng = product_lng - user_lng
         dlat = product_lng - user_lng
@@ -63,49 +57,33 @@ class Buy:
         return delta.days
 
 
-    
+    def filter_product(self):
+        pass
+
+
 
     def get_product(self):
         db = db_client.Bota
         collection = db['product_info']
         cursor = collection.find({})
-        product_data = []
+        product_data = [[]]
 
 
         for document in cursor:
+            """
+             product_data.append([document["chat_id"],
+                 document["timestamp"],
+                 document["f_pic"],document["description"]]) """
             product_data.append(document)
 
+        del product_data[0]
         return product_data
-
-
-
-    def filter_product(self,distance,day):
-
-        products = self.get_product()
-        time = datetime.datetime.now()
-        filterd_products = []
-
-        for product in products:
-            lat,lng = product["lat"],product["lng"]
-            timestamp = product["timestamp"]
-            dis = self.calculate_distance(self.lat,self.lng,lat,lng)
-            tim = self.calculate_days(timestamp,time)
-            #problem hear
-            if dis<distance and tim<day:
-                filterd_products.append(product)
-
-
-            print("dis and time",[dis,tim])
-
-        return filterd_products 
-
         
 
     def start(self,bot,update):
 
         
         chat_id = update.message.chat_id
-        self.chat_id = chat_id
         
         location_keyboard = telegram.KeyboardButton(
                 text="send_location", 
@@ -126,51 +104,25 @@ class Buy:
         print("ASDASDASDASDASDAS  ",lat,lng) 
 
         #test without Filter
-        self.lat = lat
-        self.lng = lng
+        
 
 
         if lat and lng is not None:
             
             products = self.get_product()
-            products_ = self.filter_product(10,10) 
-            
-            #better code
-            i=0 
+            print("PRODUCTS ",products)
 
-            for product in products_:
-                print("THE PRODUCT",product["pic_url"])
-                bot.send_photo(chat_id=chat_id,photo=product["pic_id"])
-                update.message.reply_text(product["description"])
-                message_id = update.message.message_id
+            """
 
-                keyboard = [
-                        [InlineKeyboardButton("location", callback_data=str(i))]]
-                
-
-                reply_markup = InlineKeyboardMarkup(keyboard)
-
-                update.message.reply_text('Please choose:', reply_markup=reply_markup)
-
-                i+=1
-                
-
-
-            update.message.reply_text("this are products aroud you please \n i am /done")
-            
-            
+            for product in products:
+                print("THE PRODUCT",product[2])
+                bot.send_photo(chat_id=chat_id,photo=product[2])
+                update.message.reply_text(product[3])
+            """
 
 
 
-    def location_button(self,bot,update):
-        product_ = self.filter_product(10,10) 
-        query = update.callback_query
-        i = query.data
-        #better code 
-        bot.send_location(chat_id=self.chat_id,latitude=product_[int(i)]["lat"],longitude=product_[int(i)]["lng"])
-
-
-
+            update.message.reply_text("this are products aroud you")
 
 
 
