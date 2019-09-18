@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 #0 server,1 buy,2 sell
-CHOOSE,BUY, SELL,UPLOAD_PIC = range(4)
+CHOOSE,BUY, SELL,UPLOAD_PIC,FINAL_LOC = range(5)
 
 
 def start_all(bot,update):
@@ -49,7 +49,7 @@ def choice(bot,update):
         STATE = BUY
         buy.start(bot,update)
     else:
-        STATE = 0
+        pass
 
     return STATE
 
@@ -66,7 +66,7 @@ def done(update, context):
 
 def main():
 
-    updater = Updater('893555483:AAGdRO8sruE8lVrCBrd8GnlBrj1W28_Sit0')
+    updater = Updater('')
 
     dp = updater.dispatcher
     buy = Buy()
@@ -81,11 +81,14 @@ def main():
                  BUY: [MessageHandler(Filters.location,buy.start)],
 
                  SELL: [MessageHandler(Filters.location,sell.start),
-                       MessageHandler(Filters.photo,sell.upload_product), #make this sell.product_upload
+                       MessageHandler(Filters.photo,sell.upload_product), 
                        ],
                  UPLOAD_PIC:[
-                       MessageHandler(Filters.text,sell.upload_product2), #make this sell.product_upload
-                     ]
+                       MessageHandler(Filters.text,sell.upload_product2),
+                     ],
+                 FINAL_LOC:[
+                       MessageHandler(Filters.location,sell.final_),
+                  ]
                  
                  
             },
@@ -98,7 +101,6 @@ def main():
 
     updater.start_polling()
     updater.idle()
-
 
 if __name__ == "__main__":
     main()

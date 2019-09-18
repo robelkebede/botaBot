@@ -33,7 +33,7 @@ def find_one():
 
         print(db_chat_id)
     except Exception as e:
-        pass
+        print(e)
         
     
 
