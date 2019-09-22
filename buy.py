@@ -14,6 +14,9 @@ logging.basicConfig(level=logging.DEBUG,
 
 db_client = pymongo.MongoClient("mongodb://localhost:27017/")  
 
+db = db_client.Bota
+user_data = db['user_data']
+
 
 
 class Buy:
@@ -106,6 +109,7 @@ class Buy:
         
         chat_id = update.message.chat_id
         self.chat_id = chat_id
+        timestamp = datetime.datetime.now()
         
         location_keyboard = telegram.KeyboardButton(
                 text="send_location", 
@@ -136,6 +140,10 @@ class Buy:
             products_ = self.filter_product(10,10) 
             
             #better code
+            #user data [chat_id,lat,lng,timestamp]
+
+            user_data.insert({"chat_id":chat_id,"timestamp":timestamp,"lat":lat,"lng":lng})
+
             i=0 
 
             for product in products_:
@@ -167,6 +175,9 @@ class Buy:
         query = update.callback_query
         i = query.data
         #better code 
+
+
+        bot.send_message(chat_id=self.chat_id,text=product_[int(i)]["description"])
         bot.send_location(chat_id=self.chat_id,latitude=product_[int(i)]["lat"],longitude=product_[int(i)]["lng"])
 
 

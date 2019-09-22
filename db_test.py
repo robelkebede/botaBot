@@ -5,16 +5,16 @@ client = pymongo.MongoClient("localhost", 27017, maxPoolSize=50)
 
 db = client.Bota
 product_info = db['product_info']
-seller_info = db['seller_info']
+user_data = db['user_data']
 
 def show_all():
 
     cursor = product_info.find({})
-    cursor1 = seller_info.find({})
+    cursor1 = user_data.find({})
 
     product_data = [[]]
 
-    for document in cursor:
+    for document in cursor1:
         print(document)
 
         
