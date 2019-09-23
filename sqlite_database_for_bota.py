@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite2
 from sqlite3 import Error
 import datetime
 import json
@@ -96,5 +96,3 @@ if __name__ == "__main__":
     #print(data[0]["chat_id"])
 
     #insert_product('asd','the real deal','1234','4234',datetime.datetime.now(),'23423','234')
-
-

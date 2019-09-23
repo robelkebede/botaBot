@@ -7,6 +7,7 @@ import telegram
 import datetime
 import logging
 import pymongo
+from sqlite_database_for_bota import fetch_product_data
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -79,6 +80,13 @@ class Buy:
             product_data.append(document)
 
         return product_data
+
+    def get_product_from_sqlite(self):
+
+        #data = fetch_product_data()
+        pass
+
+        #return data
 
 
 

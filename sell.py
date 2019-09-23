@@ -6,6 +6,8 @@ import re
 import datetime
 import pymongo
 import logging
+from sqlite_database_for_bota import insert_product
+
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -124,6 +126,8 @@ class Sell:
 
 
             product_info.insert({"chat_id":chat_id,"description":description,"pic_url":pic_url,"pic_id":pic_id,"timestamp":time,"lat":lat,"lng":lng})
+            
+            #insert_product(chat_id,description,pic_url,pic_id,timestamp,lat,lng)
 
             print([lat,lng,chat_id,time,description,pic_url,pic_id])
 
