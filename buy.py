@@ -119,17 +119,17 @@ class Buy:
         custom_keyboard =[[ location_keyboard ]]
 
         reply_markup = telegram.ReplyKeyboardMarkup(
-                custom_keyboard,one_time_keyboard=True)
+                custom_keyboard)
 
         bot.send_message(chat_id=chat_id,
                 text="Information",
                 reply_markup=reply_markup
                 )
+
             
         lat,lng = self.get_location(bot,update)
         print("ASDASDASDASDASDAS  ",lat,lng) 
 
-        #test without Filter
         self.lat = lat
         self.lng = lng
 
@@ -140,49 +140,36 @@ class Buy:
             products_ = self.filter_product(10,10) 
             
             #better code
-            #user data [chat_id,lat,lng,timestamp]
 
+            #bota consumers data
             user_data.insert({"chat_id":chat_id,"timestamp":timestamp,"lat":lat,"lng":lng})
 
-            i=0 
-
-            for product in products_:
-                print("THE PRODUCT",product["pic_url"])
-                bot.send_photo(chat_id=chat_id,photo=product["pic_id"])
-                update.message.reply_text(product["description"])
-                message_id = update.message.message_id
+            for product in enumerate(products_):
 
                 keyboard = [
-                        [InlineKeyboardButton("location", callback_data=str(i))]]
+                        [InlineKeyboardButton("location", callback_data=str(product[0]))]]
                 
-
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
-                update.message.reply_text('Please choose:', reply_markup=reply_markup)
-
-                i+=1
-                
+                bot.send_photo(chat_id=chat_id,photo=product[1]["pic_id"])
+                update.message.reply_text(str(product[0])+", "+product[1]["description"],reply_markup=reply_markup)
 
 
             update.message.reply_text("this are products aroud you please \n i am /done")
-            
-            
 
 
 
     def location_button(self,bot,update):
         product_ = self.filter_product(10,10) 
         query = update.callback_query
-        i = query.data
-        #better code 
+        i = query.data #button clicked
 
+        description = i+", "+product_[int(i)]["description"]
+        lat =product_[int(i)]["lat"]
+        lng =product_[int(i)]["lng"]
 
-        bot.send_message(chat_id=self.chat_id,text=product_[int(i)]["description"])
-        bot.send_location(chat_id=self.chat_id,latitude=product_[int(i)]["lat"],longitude=product_[int(i)]["lng"])
-
-
-
-
+        bot.send_message(chat_id=self.chat_id,text=description)
+        bot.send_location(chat_id=self.chat_id,latitude=lat,longitude=lng)
 
 
 def main():

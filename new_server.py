@@ -20,9 +20,11 @@ def start_all(bot,update):
     reply_keyboard = [['buy', 'sell']]
 
     #get the name of the user
+
+    name = update.message.from_user.first_name
  
     update.message.reply_text(
-        'Hi! My name is Bota. I will hold a conversation with you. '
+        'Hi '+name+' ! My name is Bota. I will hold a conversation with you. '
         'Send /cancel to stop talking to me.\n\n'
         'do you want to sell or buy?',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
