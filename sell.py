@@ -125,9 +125,9 @@ class Sell:
         if None not in (lat,lng,chat_id,time,description,pic_url,pic_id):
 
 
-            product_info.insert({"chat_id":chat_id,"description":description,"pic_url":pic_url,"pic_id":pic_id,"timestamp":time,"lat":lat,"lng":lng})
+            #product_info.insert({"chat_id":chat_id,"description":description,"pic_url":pic_url,"pic_id":pic_id,"timestamp":time,"lat":lat,"lng":lng})
             
-            #insert_product(chat_id,description,pic_url,pic_id,timestamp,lat,lng)
+            insert_product(str(chat_id),str(description),str(pic_url),str(pic_id),time,str(lat),str(lng))
 
             print([lat,lng,chat_id,time,description,pic_url,pic_id])
 

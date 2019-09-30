@@ -83,16 +83,16 @@ class Buy:
 
     def get_product_from_sqlite(self):
 
-        #data = fetch_product_data()
-        pass
+        data = fetch_product_data()
 
-        #return data
-
+        return data
 
 
     def filter_product(self,distance,day):
 
-        products = self.get_product()
+        #products = self.get_product()
+        products = self.get_product_from_sqlite()
+        print("THE PRODUCTSSSS ",products)
         time = datetime.datetime.now()
         filterd_products = []
 
@@ -144,13 +144,15 @@ class Buy:
 
         if lat and lng is not None:
             
-            products = self.get_product()
+            #products = self.get_product()
             products_ = self.filter_product(10,10) 
             
             #better code
 
+            print("PRODUCTTT ",products_)
+
             #bota consumers data
-            user_data.insert({"chat_id":chat_id,"timestamp":timestamp,"lat":lat,"lng":lng})
+            #user_data.insert({"chat_id":chat_id,"timestamp":timestamp,"lat":lat,"lng":lng})
 
             for product in enumerate(products_):
 

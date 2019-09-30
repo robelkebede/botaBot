@@ -1,4 +1,4 @@
-import sqlite2
+import sqlite3
 from sqlite3 import Error
 import datetime
 import json
@@ -90,8 +90,7 @@ if __name__ == "__main__":
 
     data = fetch_product_data() 
 
-    for d in data:
-        print(d["timestamp"])
+    print(data)
 
     #print(data[0]["chat_id"])
 
