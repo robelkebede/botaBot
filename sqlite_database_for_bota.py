@@ -88,9 +88,11 @@ def fetch_product_data():
 
 if __name__ == "__main__":
 
-    data = fetch_product_data() 
+    print("RUNNING FOR THE FIRST TIME")
+    create_connection(db_file)
+    create_table(db_file)
 
-    print(data)
+
 
     #print(data[0]["chat_id"])
 
