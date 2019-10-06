@@ -127,9 +127,8 @@ class Sell:
 
             print([lat,lng,chat_id,time,description,pic_url,pic_id])
 
-            update.message.reply_text("product uploaded")
+            update.message.reply_text("product uploaded /done")
 
-            return ConversationHandler.END
 
 
 
