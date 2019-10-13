@@ -14,6 +14,8 @@ COPY . /app
 
 #RUN python sqlite_database_for_bota.py
 
+EXPOSE 443 80 88 8443
+
 
 CMD ["python","new_server.py"]
 
