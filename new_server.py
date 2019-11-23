@@ -65,6 +65,10 @@ def choice(bot,update):
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
+def test(bot,update):
+    update.message.reply_text("I am alive")
+
+
 
 def done(bot, update):
     
@@ -108,6 +112,8 @@ def main():
 
 
     dp.add_handler(conv_handler)
+    dp.add_handler(CommandHandler('test',test))
+
 
     dp.add_error_handler(error)
 
