@@ -2,6 +2,7 @@ import telegram
 import logging
 from buy import Buy
 from sell import Sell
+import os
 
 from telegram.ext import Updater,CommandHandler,Dispatcher,Filters,MessageHandler,CallbackQueryHandler,ConversationHandler
 
@@ -12,7 +13,11 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 #0 server,1 buy,2 sell
+TOKEN = '893555483:AAGdRO8sruE8lVrCBrd8GnlBrj1W28_Sit0'
+PORT = int(os.environ.get('PORT', '5000'))
 CHOOSE,BUY, SELL,UPLOAD_PIC,FINAL_LOC = range(5)
+bot = telegram.Bot(token = TOKEN)
+bot.setWebhook("https://botabot5.azurewebsites.net/" + TOKEN)
 
 
 def start_all(bot,update):
@@ -70,7 +75,7 @@ def done(bot, update):
 
 def main():
 
-    updater = Updater('893555483:AAGdRO8sruE8lVrCBrd8GnlBrj1W28_Sit0')
+    updater = Updater(TOKEN)
 
     dp = updater.dispatcher
     buy = Buy()
@@ -107,6 +112,13 @@ def main():
     dp.add_error_handler(error)
 
     updater.start_polling()
+    """
+
+    updater.start_webhook(listen="0.0.0.0",
+                       port=PORT,
+                       url_path=TOKEN)
+    updater.bot.setWebhook("https://botabot5.azurewebsites.net/" + TOKEN) """
+
     updater.idle()
 
 
