@@ -70,7 +70,7 @@ def done(bot, update):
 
 def main():
 
-    updater = Updater('893555483:AAGdRO8sruE8lVrCBrd8GnlBrj1W28_Sit0')
+    updater = Updater('')
 
     dp = updater.dispatcher
     buy = Buy()
