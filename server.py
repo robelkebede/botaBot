@@ -97,7 +97,7 @@ def done(update, context):
 
 def main():
 
-    updater = Updater('893555483:AAFdgfK9_SDHeQ8AwxTzZ1FnmLpHVAa3qyM')
+    updater = Updater('')
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('test',test))
